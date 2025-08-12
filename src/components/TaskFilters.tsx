@@ -1,3 +1,5 @@
+import useFilter from "@/context/use-filter"
+
 export const FILTER = {
     ALL: 'ALL',
     COMPLETE: 'COMPLETE',
@@ -7,15 +9,30 @@ export const FILTER = {
 export type FILTER_TYPE = typeof FILTER[keyof typeof FILTER]
 
 const TaskFiltres = () => {
+    const { filter, setFilter } = useFilter()
+   
+    const baseClasses = 'cursor-pointer px-3 py-1 font-semibold rounded'
+    const passiveFilter = `${baseClasses} bg-white text-blue-500 hover:bg-gray-100`
+    const activeFilter = `${baseClasses} bg-blue-500 text-white hover:bg-blue-700`
+
     return(
-        <ul>
-            <li>
+        <ul className="w-full flex gap-5 px-3 py-1">
+            <li
+                className={filter === FILTER.ALL ? activeFilter : passiveFilter}
+                onClick={() => setFilter(FILTER.ALL)}
+            >
                 Все
             </li>
-            <li>
+            <li
+                className={filter === FILTER.IN_PROGRESS ? activeFilter : passiveFilter}
+                onClick={() => setFilter(FILTER.IN_PROGRESS)}
+            >
                 Незавершенные
             </li>
-            <li>
+            <li
+                className={filter === FILTER.COMPLETE ? activeFilter : passiveFilter}
+                onClick={() => setFilter(FILTER.COMPLETE)}
+            >
                 Завершенные
             </li>
         </ul>
