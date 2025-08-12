@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import type { Task } from "./TaskItem"
 import TaskItem from "./TaskItem"
 
@@ -14,18 +14,45 @@ const TaskList = () => {
         }
     })
 
-    const handleChange = (id: string, description: string) => {
-               console.log(id, description)
-    }
-    const handleEdit = (id: string) => {
-               console.log(id)
-    }
-    const handleCancel = (id: string) => {
-               console.log(id)
-    }
-    const handleSave = (id: string) => {
-               console.log(id)
-    }
+    const handleChange = useCallback((id: string, description: string) => {
+        if(!(id in editingTasks)) return;
+
+        setEditingTask(prev => ({
+            ...prev,
+            [id]: {
+                ...prev[id],
+                description
+            },
+        }))
+    }, [])
+
+    const handleEdit = useCallback((id: string) => {
+        const targetTask = tasks.find(task => task.id === id)
+        if(!targetTask) return;
+
+        setEditingTask(prev => ({
+            ...prev,
+            [id]: targetTask
+        }))
+    }, [])
+
+    const handleCancel = useCallback((id: string) => {
+        setEditingTask(prev => {
+            const cloneTasks = {...prev}
+            delete cloneTasks[id]
+
+            return cloneTasks
+        })
+    }, [])
+
+    const handleSave = useCallback((id: string) => {
+        console.log(id)
+    }, [])
+
+    const handleRemove = useCallback((id: string) => {
+        console.log(id)
+    }, [])
+    
     
 
     const tasks: Task[] = [
@@ -49,7 +76,7 @@ const TaskList = () => {
         }
     ]
     return(
-        <ul>
+        <ul className="flex flex-col gap-3 p-3">
             {tasks.map(task => (
                 <li key={task.id}>
                     <TaskItem 
@@ -59,6 +86,7 @@ const TaskList = () => {
                         onEdit={handleEdit}
                         onCancel={handleCancel}
                         onSave={handleSave}
+                        onRemove={handleRemove}
                     />
                 </li>
             ))}
