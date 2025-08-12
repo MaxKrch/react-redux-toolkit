@@ -4,7 +4,7 @@ import TaskNew from "./TaskNew";
 
 const TaskManager = () => {
     return(
-        <div>
+        <div className="max-w-[1280px] min-w-[320px] w-[90%] min-h-[100vh] mx-auto bg-stone-50">
             <header>
                 <TaskFiltres />
             </header>

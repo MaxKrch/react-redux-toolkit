@@ -1,3 +1,11 @@
+export const FILTER = {
+    ALL: 'ALL',
+    COMPLETE: 'COMPLETE',
+    IN_PROGRESS: 'IN_PROGRESS'
+} as const
+
+export type FILTER_TYPE = typeof FILTER[keyof typeof FILTER]
+
 const TaskFiltres = () => {
     return(
         <ul>
