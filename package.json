@@ -22,6 +22,7 @@
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.62.0",
     "react-redux": "^9.2.0",
+    "reselect": "^5.1.1",
     "zod": "^4.0.17"
   },
   "devDependencies": {
