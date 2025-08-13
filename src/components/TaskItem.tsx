@@ -52,9 +52,9 @@ const TaskItem = ({
 
   useEffect(() => {
     if (descriptionElement.current) {
-        descriptionElement.current.textContent = task.description;
+      descriptionElement.current.textContent = task.description
     }
-  }, [task.description]);
+  }, [task.description])
 
   useEffect(() => {
     return () => {
@@ -119,8 +119,7 @@ const TaskItem = ({
         suppressContentEditableWarning={true}
         contentEditable={isEditing}
         onInput={handleChange}
-      >
-      </div>
+      ></div>
       <div className="flex justify-end gap-3 bg-gray-100 px-3 py-1">
         <TaskButton classes={mainButtonClasses} {...mainButtonConfig} />
         <TaskButton classes={secondButtonClasses} {...secondButtonConfig} />

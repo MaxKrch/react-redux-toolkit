@@ -11,5 +11,5 @@ export const selectCompletedTasks = createSelector(
 
 export const selectInProgressTasks: (state: APP_STATE_TYPE) => Task[] =
   createSelector(selectTasks, (tasks): Task[] =>
-    tasks.filter((tasks) => !tasks.complete)
+    tasks.filter((task) => !task.complete)
   )

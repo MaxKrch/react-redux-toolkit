@@ -1,9 +1,5 @@
 import { type FILTER_TYPE } from '@/components/TaskFilters'
-import {
-  createContext,
-  type Dispatch,
-  type SetStateAction,
-} from 'react'
+import { createContext, type Dispatch, type SetStateAction } from 'react'
 
 const FilterContext = createContext<
   | {

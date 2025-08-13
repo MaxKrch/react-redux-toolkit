@@ -12,28 +12,34 @@ const TaskList = () => {
     [key: Task['id']]: Task
   }>({})
 
-  const handleChange = useCallback((id: string, description: string) => {
-    if (!(id in editingTasks)) return
+  const handleChange = useCallback(
+    (id: string, description: string) => {
+      if (!(id in editingTasks)) return
 
-    setEditingTask((prev) => ({
-      ...prev,
-      [id]: {
-        ...prev[id],
-        description,
-      },
-    }))
-  }, [editingTasks])
+      setEditingTask((prev) => ({
+        ...prev,
+        [id]: {
+          ...prev[id],
+          description,
+        },
+      }))
+    },
+    [editingTasks]
+  )
 
-  const handleEdit = useCallback((id: string) => {
-    const targetTask = tasks.find((task) => task.id === id)
+  const handleEdit = useCallback(
+    (id: string) => {
+      const targetTask = tasks.find((task) => task.id === id)
 
-    if (!targetTask) return
+      if (!targetTask) return
 
-    setEditingTask((prev) => ({
-      ...prev,
-      [id]: targetTask,
-    }))
-  }, [tasks])
+      setEditingTask((prev) => ({
+        ...prev,
+        [id]: targetTask,
+      }))
+    },
+    [tasks]
+  )
 
   const handleCancel = useCallback((id: string) => {
     setEditingTask((prev) => {
@@ -44,22 +50,28 @@ const TaskList = () => {
     })
   }, [])
 
-  const handleSave = useCallback((id: string) => {
-    const targetTask = editingTasks[id]
-    if (!targetTask) return
+  const handleSave = useCallback(
+    (id: string) => {
+      const targetTask = editingTasks[id]
+      if (!targetTask) return
 
-    dispatch(updateTask(targetTask))
+      dispatch(updateTask(targetTask))
 
-    setEditingTask((prev) => {
-      const cloneTasks = { ...prev }
-      delete cloneTasks[id]
-      return cloneTasks
-    })
-  }, [dispatch, editingTasks])
+      setEditingTask((prev) => {
+        const cloneTasks = { ...prev }
+        delete cloneTasks[id]
+        return cloneTasks
+      })
+    },
+    [dispatch, editingTasks]
+  )
 
-  const handleRemove = useCallback((id: string) => {
-    dispatch(removeTask(id))
-  }, [dispatch])
+  const handleRemove = useCallback(
+    (id: string) => {
+      dispatch(removeTask(id))
+    },
+    [dispatch]
+  )
 
   return (
     <ul className="flex flex-col gap-3 p-3">

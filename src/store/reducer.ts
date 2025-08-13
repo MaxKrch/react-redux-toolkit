@@ -27,7 +27,7 @@ const reducer = (state = initialState, action: CREATED_ACTIONS_TYPE) => {
     case ACTION_TYPES.REMOVE_TASK:
       return {
         ...state,
-        tasks: state.tasks.filter((tasks) => tasks.id !== action.payload),
+        tasks: state.tasks.filter((task) => task.id !== action.payload),
       }
 
     case ACTION_TYPES.TOGGLE_STATUS_TASK:
