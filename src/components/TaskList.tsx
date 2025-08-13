@@ -1,97 +1,83 @@
-import { useCallback, useState } from "react"
-import type { Task } from "./TaskItem"
-import TaskItem from "./TaskItem"
+import { useCallback, useState } from 'react'
+import type { Task } from './TaskItem'
+import TaskItem from './TaskItem'
+import { useAppDispatch, useAppSelector } from '@/store/use-app-store'
+import { selectTasks } from '@/store/selectors'
+import { removeTask, updateTask } from '@/store/actions'
 
 const TaskList = () => {
-    const [editingTasks, setEditingTask] = useState<{
-        [key: Task['id']]:Task
-    }>({
-        '2': {
-            id: '2',
-            title: 'Third task',
-            description: 'Third task description',
-            complete: false,
-        }
+  const tasks = useAppSelector(selectTasks)
+  const dispatch = useAppDispatch()
+  const [editingTasks, setEditingTask] = useState<{
+    [key: Task['id']]: Task
+  }>({})
+
+  const handleChange = useCallback((id: string, description: string) => {
+    if (!(id in editingTasks)) return
+
+    setEditingTask((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        description,
+      },
+    }))
+  }, [editingTasks])
+
+  const handleEdit = useCallback((id: string) => {
+    const targetTask = tasks.find((task) => task.id === id)
+
+    if (!targetTask) return
+
+    setEditingTask((prev) => ({
+      ...prev,
+      [id]: targetTask,
+    }))
+  }, [tasks])
+
+  const handleCancel = useCallback((id: string) => {
+    setEditingTask((prev) => {
+      const cloneTasks = { ...prev }
+      delete cloneTasks[id]
+
+      return cloneTasks
     })
+  }, [])
 
-    const handleChange = useCallback((id: string, description: string) => {
-        if(!(id in editingTasks)) return;
+  const handleSave = useCallback((id: string) => {
+    const targetTask = editingTasks[id]
+    if (!targetTask) return
 
-        setEditingTask(prev => ({
-            ...prev,
-            [id]: {
-                ...prev[id],
-                description
-            },
-        }))
-    }, [])
+    dispatch(updateTask(targetTask))
 
-    const handleEdit = useCallback((id: string) => {
-        const targetTask = tasks.find(task => task.id === id)
-        if(!targetTask) return;
+    setEditingTask((prev) => {
+      const cloneTasks = { ...prev }
+      delete cloneTasks[id]
+      return cloneTasks
+    })
+  }, [dispatch, editingTasks])
 
-        setEditingTask(prev => ({
-            ...prev,
-            [id]: targetTask
-        }))
-    }, [])
+  const handleRemove = useCallback((id: string) => {
+    dispatch(removeTask(id))
+  }, [dispatch])
 
-    const handleCancel = useCallback((id: string) => {
-        setEditingTask(prev => {
-            const cloneTasks = {...prev}
-            delete cloneTasks[id]
-
-            return cloneTasks
-        })
-    }, [])
-
-    const handleSave = useCallback((id: string) => {
-        console.log(id)
-    }, [])
-
-    const handleRemove = useCallback((id: string) => {
-        console.log(id)
-    }, [])
-    
-    
-
-    const tasks: Task[] = [
-        {
-            id: '0',
-            title: 'First task',
-            description: 'Firsts task description',
-            complete: false,
-        },
-        {   
-            id: '1',
-            title: 'Second task',
-            description: 'Second task description',
-            complete: true,
-        },
-        {
-            id: '2',
-            title: 'Third task',
-            description: 'Third task description',
-            complete: false,
-        }
-    ]
-    return(
-        <ul className="flex flex-col gap-3 p-3">
-            {tasks.map(task => (
-                <li key={task.id}>
-                    <TaskItem 
-                        task={editingTasks[task.id] ? editingTasks[task.id] : task}
-                        isEditing={task.id in editingTasks}
-                        onChange={handleChange}
-                        onEdit={handleEdit}
-                        onCancel={handleCancel}
-                        onSave={handleSave}
-                        onRemove={handleRemove}
-                    />
-                </li>
-            ))}
-        </ul>
-    )
+  return (
+    <ul className="flex flex-col gap-3 p-3">
+      {tasks.map((task) => (
+        <li key={task.id}>
+          <TaskItem
+            task={editingTasks[task.id] ? editingTasks[task.id] : task}
+            isEditing={task.id in editingTasks}
+            onChange={handleChange}
+            onEdit={handleEdit}
+            onCancel={handleCancel}
+            onSave={handleSave}
+            onRemove={handleRemove}
+          />
+        </li>
+      ))}
+    </ul>
+  )
 }
 
 export default TaskList

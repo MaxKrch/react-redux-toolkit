@@ -1,6 +1,6 @@
-import { Provider } from "react-redux";
-import TaskManager from "./components/TaskManager";
-import store from "./store/store";
+import { Provider } from 'react-redux'
+import TaskManager from './components/TaskManager'
+import store from './store/store'
 
 function App() {
   return (
@@ -10,4 +10,4 @@ function App() {
   )
 }
 
-export default App;
+export default App
