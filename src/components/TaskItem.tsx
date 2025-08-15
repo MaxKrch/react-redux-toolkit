@@ -36,7 +36,7 @@ const TaskItem = ({
 
   const sendChange = () => {
     if (!descriptionElement.current) return
-    onChange(task.id, descriptionElement.current.textContent.trim())
+    onChange(task.id, descriptionElement.current.textContent?.trim() ?? '')
   }
 
   const toggleStatus = () => {
