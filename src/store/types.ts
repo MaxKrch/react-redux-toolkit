@@ -1,14 +1,21 @@
-import type { Task } from '@/components/TaskItem'
+import type { EntityState } from '@reduxjs/toolkit'
+import { SLICE_NAMES } from './consts'
 
-export const ACTION_TYPES = {
-  ADD_TASK: 'ADD_TASK',
-  UPDATE_TASK: 'UPDATE_TASK',
-  REMOVE_TASK: 'REMOVE_TASK',
-  TOGGLE_STATUS_TASK: 'TOGGLE_STATUS_TASK',
-} as const
+export type List = { id: string; title: string }
+export type Task = {
+  id: string
+  title: string
+  description: string
+  completed: boolean
+  listId: string
+}
 
-export type ACTION_TYPES_TYPE = (typeof ACTION_TYPES)[keyof typeof ACTION_TYPES]
+export type UI = {
+  activeListId: string | null
+}
 
 export type STATE_TYPE = {
-  tasks: Task[]
+  [SLICE_NAMES.LISTS]: EntityState<List, List['id']>
+  [SLICE_NAMES.TASKS]: EntityState<Task, Task['id']>
+  [SLICE_NAMES.UI]: UI
 }

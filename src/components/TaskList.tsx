@@ -1,12 +1,22 @@
-import { useCallback, useState } from 'react'
-import type { Task } from './TaskItem'
+import { useCallback, useMemo, useState } from 'react'
 import TaskItem from './TaskItem'
 import { useAppDispatch, useAppSelector } from '@/store/use-app-store'
-import { selectTasks } from '@/store/selectors'
-import { removeTask, updateTask } from '@/store/actions'
+import { selectActiveListId, selectTasksByListId } from '@/store/selectors'
+import type { Task } from '@/store/types'
+import useFilter from '@/context/use-filter'
+import { FILTER } from './TaskFilters'
+import { removeTask, updateTask } from '@/store/slices/tasks-slice'
 
 const TaskList = () => {
-  const tasks = useAppSelector(selectTasks)
+  const activeListId = useAppSelector(selectActiveListId)
+  const { filter: activeFilter } = useFilter()
+
+  const selectorWithListId = useMemo(
+    () => selectTasksByListId(activeListId),
+    [activeListId]
+  )
+  const tasks = useAppSelector(selectorWithListId)
+
   const dispatch = useAppDispatch()
   const [editingTasks, setEditingTask] = useState<{
     [key: Task['id']]: Task
@@ -29,7 +39,7 @@ const TaskList = () => {
 
   const handleEdit = useCallback(
     (id: string) => {
-      const targetTask = tasks.find((task) => task.id === id)
+      const targetTask = tasks[FILTER.ALL].find((task) => task.id === id)
 
       if (!targetTask) return
 
@@ -75,7 +85,7 @@ const TaskList = () => {
 
   return (
     <ul className="flex flex-col gap-3 p-3">
-      {tasks.map((task) => (
+      {tasks[activeFilter].map((task) => (
         <li key={task.id}>
           <TaskItem
             task={editingTasks[task.id] ? editingTasks[task.id] : task}

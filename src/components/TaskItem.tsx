@@ -2,14 +2,8 @@ import { memo, useEffect, useRef } from 'react'
 import TaskButton from './TaskButton'
 import clsx from 'clsx'
 import { useAppDispatch } from '@/store/use-app-store'
-import { toggleStatusTask } from '@/store/actions'
-
-export type Task = {
-  id: string
-  title: string
-  description: string
-  complete: boolean
-}
+import type { Task } from '@/store/types'
+import { toggleStatusTask } from '@/store/slices/tasks-slice'
 
 type TaskProps = {
   task: Task
@@ -87,14 +81,14 @@ const TaskItem = ({
       <div
         className={clsx({
           'flex justify-between items-center px-3 py-1': true,
-          'bg-green-100': !task.complete,
-          'bg-gray-300': task.complete,
+          'bg-green-100': !task.completed,
+          'bg-gray-300': task.completed,
         })}
       >
         <h3
           className={clsx({
             'font-semibold': true,
-            'line-through': task.complete,
+            'line-through': task.completed,
           })}
         >
           {task.title}
@@ -103,9 +97,9 @@ const TaskItem = ({
           onClick={toggleStatus}
           className="flex gap-1 items-center cursor-pointer"
         >
-          <div>Complete:</div>
+          <div>completed:</div>
           <div className="w-5 h-5 bg-white rounded-full text-green-800 flex justify-center items-center">
-            {task.complete && '✓'}
+            {task.completed && '✓'}
           </div>
         </div>
       </div>

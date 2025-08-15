@@ -2,12 +2,14 @@ import FilterProvider from '@/context/FilterProvider'
 import TaskFiltres from './TaskFilters'
 import TaskList from './TaskList'
 import TaskNew from './TaskNew'
+import TaskListsToggler from './TaskListsToggler'
 
 const TaskManager = () => {
   return (
     <FilterProvider>
       <div className="max-w-[1280px] min-w-[320px] w-[90%] min-h-[100vh] mx-auto bg-stone-50">
         <header>
+          <TaskListsToggler />
           <TaskFiltres />
         </header>
 
