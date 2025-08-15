@@ -1,8 +1,19 @@
-import { applyMiddleware, legacy_createStore as createStore } from 'redux'
-import reducer from './reducer'
-import { logger } from './middlewares'
+import listReducer from './slices/lists-slice'
+import taskReducer from './slices/tasks-slice'
+import uiReducer from './slices/ui-slice'
 
-const store = createStore(reducer, applyMiddleware(logger))
+import { logger } from './middlewares'
+import { configureStore } from '@reduxjs/toolkit'
+import { SLICE_NAMES } from './consts'
+
+const store = configureStore({
+  reducer: {
+    [SLICE_NAMES.LISTS]: listReducer,
+    [SLICE_NAMES.TASKS]: taskReducer,
+    [SLICE_NAMES.UI]: uiReducer,
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+})
 
 export type APP_STATE_TYPE = ReturnType<typeof store.getState>
 export type APP_DISPATCH_TYPE = typeof store.dispatch
